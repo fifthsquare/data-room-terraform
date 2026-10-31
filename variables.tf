@@ -82,17 +82,17 @@ variable "azure_storage_container_name" {
 }
 
 # AI
-variable "openai_api_key" {
+variable "openai_compatible_api_key" {
   default   = ""
   sensitive = true
 }
 
-variable "openai_base_url" {
+variable "openai_compatible_base_url" {
   default = ""
 }
 
-variable "openai_model" {
-  default = "gpt-4o"
+variable "openai_compatible_model" {
+  default = "Kimi-K2.5"
 }
 
 # Observability
@@ -105,8 +105,8 @@ variable "langfuse_secret_key" {
   sensitive = true
 }
 
-variable "langfuse_baseurl" {
-  default = "https://cloud.langfuse.com"
+variable "langfuse_base_url" {
+  default = "https://us.cloud.langfuse.com"
 }
 
 variable "ghcr_username" {

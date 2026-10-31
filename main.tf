@@ -10,6 +10,12 @@ terraform {
       source = "hashicorp/azuread"
     }
   }
+   backend "azurerm" {
+    resource_group_name  = "PackagedOffering"
+    storage_account_name = "fsdataroom"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 
   required_version = ">= 1.1.0"
 }

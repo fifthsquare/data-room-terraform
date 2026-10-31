@@ -40,6 +40,7 @@ resource "azapi_resource" "environment" {
   body = {
     properties = {}
   }
+  response_export_values = ["properties.defaultDomain"]
 }
 
 resource "azapi_resource" "app" {
@@ -53,19 +54,38 @@ resource "azapi_resource" "app" {
       configuration = {
         ingress = {
           external   = true # public HTTPS endpoint
-          targetPort = 80
+          targetPort = 3000
           transport  = "auto"
         }
+        secrets = [
+          {
+            name  = "ghcr-pat"
+            value = var.ghcr_pat
+          }
+        ]
+        registries = [
+          {
+            server            = "ghcr.io"
+            username          = var.ghcr_username
+            passwordSecretRef = "ghcr-pat"
+          }
+        ]
       }
       template = {
         containers = [
           {
             name  = "main"
-            image = "mcr.microsoft.com/k8se/quickstart:latest"
+            image = "${var.image_path}:${var.image_version}"
             resources = {
-              cpu    = 0.25
-              memory = "0.5Gi"
+              cpu    = 0.5
+              memory = "1.0Gi"
             }
+            env = [
+              for k, v in local.app_env : {
+                name  = k
+                value = v
+              } if v != "" && v != null
+            ]
           }
         ]
         scale = {
